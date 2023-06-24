@@ -36,6 +36,15 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2  
   easy_sidemenu: ^0.4.1
+  dio: ^5.2.1+1
+  flutter_riverpod: ^2.3.6
+  logger: ^1.4.0
+  flutter_dotenv: ^5.1.0
+  hive: ^2.2.3
+  path_provider: ^2.0.15
+  hive_flutter: ^1.1.0
+  styled_widget: ^0.4.1
+  isar: ^3.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'package:dlsm_web/admin/dashboard.dart';
+import 'package:dlsm_web/admin/sign_in.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Nunito',
       ),
-      home: const AdminDashboard(title: 'Admin Dashboard'),
+      home: SignIn(),
     );
   }
 }
