@@ -36,6 +36,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2  
   easy_sidemenu: ^0.4.1
+  pdf: ^3.10.4
+  dio: ^5.2.1+1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +82,9 @@ flutter:
     - family: Nunito
       fonts:
         - asset: assets/fonts/nunito-Regular.ttf
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
