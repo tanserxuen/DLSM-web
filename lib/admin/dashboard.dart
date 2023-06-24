@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:dlsm_web/admin/viewRebate.dart';
 import 'package:dlsm_web/admin/viewReport.dart';
 import 'package:dlsm_web/admin/viewUserProfile.dart';
+import 'package:dlsm_web/globalVar.dart' as globalVar;
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +26,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
       page.jumpToPage(p0);
     });
     super.initState();
+    signInAsAdmin();
   }
 
   @override
@@ -50,5 +53,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ],
       ),
     );
+  }
+
+  signInAsAdmin() async {
+    try {
+      var response = await Dio().post(
+          'https://drive-less-save-more-1.herokuapp.com/auth/signin',
+          data: {"phoneNumber": "1111111111", "password": "1234"});
+      if (response.statusCode == 200) {
+        setState(() {
+          // print(response.data['access_token']);
+          globalVar.token = response.data['access_token'];
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 }
