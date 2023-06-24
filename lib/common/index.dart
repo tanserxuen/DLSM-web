@@ -11,28 +11,22 @@ export 'package:isar/isar.dart';
 
 // Services
 export 'services/logger_service.dart';
-// export 'services/snackbar_service.dart';
+export 'services/snackbar_service.dart';
 export 'services/env_service.dart';
 export 'services/dio_service.dart';
-// export 'services/geolocator_service.dart';
-// export 'services/activity_recognition_service.dart';
-// export 'services/isar_service.dart';
-// export 'services/geocode_service.dart';
 
 // Views
-// export 'views/loading_page.dart';
-// export 'views/error_page.dart';
+export 'views/loading_page.dart';
+export 'views/error_page.dart';
 
 // Common widgets
-// export 'widgets/passcode_field.dart';
-// export 'widgets/phone_number_field.dart';
-// export 'widgets/dlsm_logo.dart';
-// export 'widgets/confirm_cancel_dialog_box.dart';
-// export 'widgets/custom_form_field.dart';
-// export 'widgets/custom_elevatedbutton.dart';
-// export 'widgets/custom_textfield.dart';
-// export 'widgets/background_decoration.dart';
-// export 'widgets/gauge.dart';
+export 'widgets/dlsm_logo.dart';
+export 'widgets/confirm_cancel_dialog_box.dart';
+export 'widgets/custom_form_field.dart';
+export 'widgets/custom_elevatedbutton.dart';
+export 'widgets/custom_textfield.dart';
+export 'widgets/background_decoration.dart';
+export 'widgets/phone_number_field.dart';
 
 // Utils
-// export 'utils/util.dart';
+export 'utils/util.dart';

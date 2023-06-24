@@ -1,6 +1,8 @@
-import 'package:dlsm/app/index.dart';
-import 'package:dlsm/common/index.dart';
-import 'package:dlsm/features/user/index.dart';
+// ignore_for_file: deprecated_member_use
+
+import 'package:dlsm_web/admin/user/index.dart';
+import 'package:dlsm_web/app/index.dart';
+import 'package:dlsm_web/common/index.dart';
 
 import '../dtos/index.dart';
 import '../services/auth_service.dart';
@@ -64,6 +66,7 @@ class _SignInFormState extends ConsumerState<SignInForm> {
       const SizedBox(height: 25),
       const Text('PASSWORD').fontSize(13).fontWeight(FontWeight.bold),
       inputPassword(),
+      const SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -75,28 +78,14 @@ class _SignInFormState extends ConsumerState<SignInForm> {
               label: "Reset Passcode")
         ],
       ),
+      const SizedBox(height: 25),
       CustomElevatedButton(
         label: "LOGIN",
         theme: CustomTheme.activeTheme,
         onPressed: () =>
             login(context, _phoneController.text, _passwordController.text),
       ).width(double.infinity),
-      <Widget>[
-        Text(
-          "Don't have an account?",
-          style: TextStyle(
-              fontSize: CustomTheme
-                  .descriptionTheme.textTheme.displaySmall?.fontSize),
-        ),
-        TextButton(
-          onPressed: () => navigator.pushNamed(Routes.signUpPage),
-          style: TextButton.styleFrom(
-            textStyle: CustomTheme.descriptionTheme.textTheme.displaySmall,
-            foregroundColor: Colors.blue,
-          ),
-          child: const Text("Sign Up"),
-        ),
-      ].toRow(mainAxisAlignment: MainAxisAlignment.center).padding(bottom: 25),
+      const SizedBox(height: 25),
       Text("Version 1.0.0 + BETA",
               style: TextStyle(
                   fontSize: CustomTheme

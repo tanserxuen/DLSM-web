@@ -1,9 +1,11 @@
+
+
+
 class AuthTokensResponseDTO {
   String accessToken;
   String refreshToken;
 
-  AuthTokensResponseDTO(
-      {required this.accessToken, required this.refreshToken});
+  AuthTokensResponseDTO({required this.accessToken, required this.refreshToken});
 
   factory AuthTokensResponseDTO.fromJson(Map<String, dynamic> json) {
     return AuthTokensResponseDTO(

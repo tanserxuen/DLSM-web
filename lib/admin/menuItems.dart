@@ -1,9 +1,9 @@
-import 'dart:html';
-
+import 'package:dlsm_web/admin/user/index.dart';
+import 'package:dlsm_web/common/index.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 
-class SideBarMenu extends StatelessWidget {
+class SideBarMenu extends ConsumerStatefulWidget {
   const SideBarMenu({
     super.key,
     required this.sideMenu,
@@ -12,9 +12,16 @@ class SideBarMenu extends StatelessWidget {
   final SideMenuController sideMenu;
 
   @override
+  ConsumerState<SideBarMenu> createState() => _SideBarMenuState();
+}
+
+class _SideBarMenuState extends ConsumerState<SideBarMenu> {
+  UserState get _userState => ref.read(userStateProvider);
+
+  @override
   Widget build(BuildContext context) {
     return SideMenu(
-      controller: sideMenu,
+      controller: widget.sideMenu,
       style: SideMenuStyle(
         // showTooltip: false,
         displayMode: SideMenuDisplayMode.auto,
@@ -34,8 +41,12 @@ class SideBarMenu extends StatelessWidget {
               maxHeight: 150,
               maxWidth: 150,
             ),
-            child: Image.asset(
-              'assets/images/easy_sidemenu.png',
+            // child: Image.asset(
+            //   'assets/imgs/easy_sidemenu.png',
+            // ),
+            child: const Text(
+              'Easy SideMenu',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           const Divider(
@@ -44,11 +55,12 @@ class SideBarMenu extends StatelessWidget {
           ),
         ],
       ),
-      footer: const Padding(
-        padding: EdgeInsets.all(8.0),
+      footer: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Text(
-          'mohada',
-          style: TextStyle(fontSize: 15),
+          "Welcome , ${_userState.value!.fullName}",
+          style: const TextStyle(
+              fontSize: 15, fontWeight: FontWeight.bold, wordSpacing: 2),
         ),
       ),
       items: [
@@ -56,7 +68,7 @@ class SideBarMenu extends StatelessWidget {
           priority: 0,
           title: 'Rebate',
           onTap: (page, _) {
-            sideMenu.changePage(page);
+            widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.money),
           // badgeContent: const Text(
@@ -69,7 +81,7 @@ class SideBarMenu extends StatelessWidget {
           priority: 1,
           title: 'User Profile',
           onTap: (page, _) {
-            sideMenu.changePage(page);
+            widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.person),
         ),
@@ -77,7 +89,7 @@ class SideBarMenu extends StatelessWidget {
           priority: 2,
           title: 'Report',
           onTap: (page, _) {
-            sideMenu.changePage(page);
+            widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.file_open),
           // trailing: Container(

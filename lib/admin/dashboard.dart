@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:dlsm_web/admin/viewRebate.dart';
 import 'package:dlsm_web/admin/viewReport.dart';
 import 'package:dlsm_web/admin/viewUserProfile.dart';
