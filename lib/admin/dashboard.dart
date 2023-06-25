@@ -1,8 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:dlsm_web/admin/viewRebate.dart';
 import 'package:dlsm_web/admin/viewReport.dart';
 import 'package:dlsm_web/admin/viewUserProfile.dart';
+import 'package:dlsm_web/globalVar.dart' as globalVar;
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +44,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: const [
                 RebatePage(),
                 ProfilePage(),
-                ReportPage(),
+                //ReportPage(),
               ],
             ),
           ),
@@ -53,4 +52,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ),
     );
   }
+
+  
 }
