@@ -84,8 +84,9 @@ class _ReportPageState extends State<ReportPage> {
                     height: 32, child: pw.Text(e['campaign'].toString())),
                 pw.Container(
                     height: 32,
-                    child: pw.Text(DateFormat("yyyy-MM-dd h:mm:ss a")
-                        .format(DateTime.parse(e['requestedDate'])))),
+                    // child: pw.Text(DateFormat("yyyy-MM-dd h:mm:ss a")
+                    //     .format(DateTime.parse(e['requestedDate'])))),
+                    child: pw.Text(e['requestedDate'])),
                 pw.Container(
                     height: 32, child: pw.Text(e['rebateType'].toString())),
                 pw.Container(height: 32, child: pw.Text(e['status'])),
