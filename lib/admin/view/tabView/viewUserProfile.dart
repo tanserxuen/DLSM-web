@@ -34,81 +34,86 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final userListState = ref.watch(userListStateProvider);
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
       child: userListState.isLoading == true
           ? const Center(child: CircularProgressIndicator())
-          : Container(
-              child: <Widget>[
-                const Text('Admin Details')
-                    .fontSize(25)
-                    .fontWeight(FontWeight.bold)
-                    .padding(top: 10, left: 10),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: DataTable(
-                    dataRowMaxHeight: 100,
-                    columns: [
-                      _dataColumn('ID'),
-                      _dataColumn('Full Name'),
-                      _dataColumn('Nick Name'),
-                      _dataColumn('Email'),
-                      _dataColumn('Phone No'),
-                      _dataColumn('ID No'),
-                      _dataColumn('Action'),
-                    ],
-                    rows: [
-                      for (int i = 0; i < userListState.userList!.length; i++)
-                        if (userListState.userList?[i].roles[0] == 'admin')
-                          _dataRow(
-                            userListState.userList![i].id,
-                            userListState.userList![i].fullName,
-                            userListState.userList![i].nickName,
-                            userListState.userList![i].email,
-                            userListState.userList![i].phoneNumber,
-                            userListState.userList![i].idNo,
-                            userListState.userList![i].roles[0],
-                            isEvenRow: i % 2 == 0,
-                          ),
-                    ],
-                  ),
+          : Column(
+            children: [
+              Container(
+                  child: <Widget>[
+                    const Text('Admin Details')
+                        .fontSize(25)
+                        .fontWeight(FontWeight.bold)
+                        .padding(top: 10),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width*0.85,
+                      child: DataTable(
+                        dataRowMaxHeight: 80,
+                        columnSpacing: 5,
+                        columns: [
+                          _dataColumn('ID'),
+                          _dataColumn('Full Name'),
+                          _dataColumn('Nick Name'),
+                          _dataColumn('Email'),
+                          _dataColumn('Phone No'),
+                          _dataColumn('ID No'),
+                         // _dataColumn('Action'),
+                        ],
+                        rows: [
+                          for (int i = 0; i < userListState.userList!.length; i++)
+                            if (userListState.userList?[i].roles[0] == 'admin')
+                              _dataRow(
+                                userListState.userList![i].id,
+                                userListState.userList![i].fullName,
+                                userListState.userList![i].nickName,
+                                userListState.userList![i].email,
+                                userListState.userList![i].phoneNumber,
+                                userListState.userList![i].idNo,
+                                //userListState.userList![i].roles[0],
+                                isEvenRow: i % 2 == 0,
+                              ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 100),
+                    const Text('User Details')
+                        .fontSize(25)
+                        .fontWeight(FontWeight.bold)
+                        .padding(top: 10),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width*0.85,
+                      child: DataTable(
+                        dataRowMaxHeight: 80,
+                        columnSpacing: 5,
+                        columns: [
+                          _dataColumn('ID'),
+                          _dataColumn('Full Name'),
+                          _dataColumn('Nick Name'),
+                          _dataColumn('Email'),
+                          _dataColumn('Phone No'),
+                          _dataColumn('ID No'),
+                        ],
+                        rows: [
+                          for (int i = 0; i < userListState.userList!.length; i++)
+                            if (userListState.userList?[i].roles[0] == 'user')
+                              _dataRow(
+                                userListState.userList![i].id,
+                                userListState.userList![i].fullName,
+                                userListState.userList![i].nickName,
+                                userListState.userList![i].email,
+                                userListState.userList![i].phoneNumber,
+                                userListState.userList![i].idNo,
+                                isEvenRow: i % 2 == 0,
+                              ),
+                        ],
+                      ),
+                    ),
+                  ].toColumn(),
                 ),
-                const SizedBox(height: 100),
-                const Text('User Details')
-                    .fontSize(25)
-                    .fontWeight(FontWeight.bold)
-                    .padding(top: 10, left: 10),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: DataTable(
-                    dataRowMaxHeight: 100,
-                    columns: [
-                      _dataColumn('ID'),
-                      _dataColumn('Full Name'),
-                      _dataColumn('Nick Name'),
-                      _dataColumn('Email'),
-                      _dataColumn('Phone No'),
-                      _dataColumn('ID No'),
-                      _dataColumn('Action'),
-                    ],
-                    rows: [
-                      for (int i = 0; i < userListState.userList!.length; i++)
-                        if (userListState.userList?[i].roles[0] == 'user')
-                          _dataRow(
-                            userListState.userList![i].id,
-                            userListState.userList![i].fullName,
-                            userListState.userList![i].nickName,
-                            userListState.userList![i].email,
-                            userListState.userList![i].phoneNumber,
-                            userListState.userList![i].idNo,
-                            userListState.userList![i].roles[0],
-                            isEvenRow: i % 2 == 0,
-                          ),
-                    ],
-                  ),
-                ),
-              ].toColumn().alignment(Alignment.topLeft),
-            ),
+            ],
+          ),
     );
   }
 
@@ -122,7 +127,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   DataRow _dataRow(String id, String fullname, String nickname, String email,
-      String phone, String idNo, String role,
+      String phone, String idNo,
       {required bool isEvenRow}) {
     final backgroundColor = isEvenRow
         ? const Color.fromARGB(255, 166, 203, 234).withOpacity(0.2)
@@ -135,22 +140,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         DataCell(Text(email)),
         DataCell(Text('+60 $phone')),
         DataCell(Text(idNo)),
-        role == "user"
-            ? DataCell(SizedBox(
-                width: 100,
-                child: ElevatedButton(
-                    onPressed: () {
-                      _userProfileService.generateReport(id);
-                      onGenerate(id);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                    child: const Text('Rebate Report')),
-              ))
-            : const DataCell(Text('')),
+
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {

@@ -29,10 +29,7 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
         selectedColor: Colors.lightBlue,
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
-        // decoration: BoxDecoration(
-        //   borderRadius: BorderRadius.all(Radius.circular(10)),
-        // ),
-        // backgroundColor: Colors.blueGrey[700]
+       
       ),
       title: Column(
         children: [
@@ -41,9 +38,7 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
               maxHeight: 150,
               maxWidth: 150,
             ),
-            // child: Image.asset(
-            //   'assets/imgs/easy_sidemenu.png',
-            // ),
+           
             child: const Text(
               'Easy SideMenu',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -71,11 +66,7 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
             widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.money),
-          // badgeContent: const Text(
-          //   '3',
-          //   style: TextStyle(color: Colors.white),
-          // ),
-          // tooltipContent: "This is a tooltip for Dashboard item",
+        
         ),
         SideMenuItem(
           priority: 1,
@@ -92,18 +83,7 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
             widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.file_open),
-          // trailing: Container(
-          //     decoration: const BoxDecoration(
-          //         color: Colors.amber,
-          //         borderRadius: BorderRadius.all(Radius.circular(6))),
-          //     child: Padding(
-          //       padding:
-          //           const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
-          //       child: Text(
-          //         'New',
-          //         style: TextStyle(fontSize: 11, color: Colors.grey[800]),
-          //       ),
-          //     )),
+         
         ),
       ],
     );
