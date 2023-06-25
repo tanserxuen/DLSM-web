@@ -1,6 +1,7 @@
 // import 'package:dio/dio.dart';
 import 'package:dlsm_web/admin/model/participantRecord.dart';
 import 'package:dlsm_web/admin/model/rebateStatus.dart';
+import 'package:dlsm_web/admin/states/rebate_list_state.dart';
 
 import '../../app/index.dart';
 import '../../common/index.dart';
@@ -14,10 +15,14 @@ final rebateServiceProvider =
 
 class RebateService extends RiverpodService {
   Dio get _dio => ref.read(dioServiceProvider).backendDio;
+  Logger get _logger => ref.read(loggerServiceProvider);
+  RebateListStateNotifier get _rebateListStateNotifier =>
+      ref.read(rebateListStateProvider.notifier);
 
   RebateService(ProviderRef ref) : super(ref);
 
-  Future<List<Rebate>> fetchData(status) async {
+  Future<void> fetchData(status) async {
+    _rebateListStateNotifier.setIsLoading(true);
     final response = await _dio.get('/rebate/rebateList');
     // print(response.data);
     final data = response.data as List<dynamic>;
@@ -25,8 +30,8 @@ class RebateService extends RiverpodService {
         .map((e) => Rebate.fromJson(e))
         .where((rebate) => rebate.status == status)
         .toList();
-
-    return dataList;
+    _logger.i(dataList);
+    _rebateListStateNotifier.setRebateList(dataList);
   }
 
   Future<ParticipantRecord> fetchParticipantRecord(

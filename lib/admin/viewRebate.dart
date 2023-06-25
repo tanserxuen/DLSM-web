@@ -1,4 +1,5 @@
 import 'package:dlsm_web/admin/services/rebate_service.dart';
+import 'package:dlsm_web/admin/states/rebate_list_state.dart';
 import 'package:dlsm_web/common/index.dart';
 import 'package:flutter/material.dart';
 
@@ -14,42 +15,43 @@ class RebatePage extends ConsumerStatefulWidget {
 
 class _RebatePageState extends ConsumerState<RebatePage> {
   RebateService get _rebateService => ref.read(rebateServiceProvider);
-
-  String selectedStatus = 'SUBMITTED';
   List participantRecords = [];
-  List rebates = [];
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      List newArray = [];
-      List rebateList = await _rebateService.fetchData(selectedStatus);
-      for (var rebate in rebateList) {
-        var record = await _rebateService.fetchParticipantRecord(
-            rebate.user, rebate.campaign);
-        newArray.add(record);
-      }
-      setState(() {
-        participantRecords = newArray;
-        print(participantRecords);
-        rebates = rebateList;
-        print(rebates);
-      });
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _rebateService.fetchData("SUBMITTED");
+      // for (var rebate in rebateList) {
+      //   var record = await _rebateService.fetchParticipantRecord(
+      //       rebate.user, rebate.campaign);
+      //   newArray.add(record);
+      // }
+      // setState(() {
+      //   participantRecords = newArray;
+      //   print(participantRecords);
+      //   rebates = rebateList;
+      //   print(rebates);
+      // });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final rebateService = ref.read(rebateServiceProvider);
-
+    final rebateListState = ref.watch(rebateListStateProvider);
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           _buildStatusButton(),
           Expanded(
-            child: _buildRebateTable(rebateService, selectedStatus),
+            child: rebateListState.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : rebateListState.rebateList!.isEmpty
+                    ? const Center(
+                        child:
+                            Text('There are cuurently no rebates to display'))
+                    : buildTable(rebateListState.rebateList!),
           )
         ],
       ),
@@ -62,55 +64,25 @@ class _RebatePageState extends ConsumerState<RebatePage> {
       children: [
         ElevatedButton(
           onPressed: () {
-            setState(() {
-              selectedStatus = 'SUBMITTED';
-            });
+            _rebateService.fetchData('SUBMITTED');
           },
-          child: Text('Submitted'),
+          child: const Text('Submitted'),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {
-            setState(() {
-              selectedStatus = 'APPROVED';
-            });
+            _rebateService.fetchData('APPROVED');
           },
-          child: Text('Approved'),
+          child: const Text('Approved'),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {
-            setState(() {
-              selectedStatus = 'REJECTED';
-            });
+            _rebateService.fetchData('REJECTED');
           },
-          child: Text('Rejected'),
+          child: const Text('Rejected'),
         ),
       ],
-    );
-  }
-
-  Widget _buildRebateTable(RebateService rebateService, String status) {
-    return FutureBuilder<List<Rebate>>(
-      future: rebateService.fetchData(status),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else if (snapshot.hasData) {
-          final dataList = snapshot.data!;
-          return buildTable(dataList);
-        } else {
-          return Center(
-            child: Text('No data available.'),
-          );
-        }
-      },
     );
   }
 
@@ -118,19 +90,18 @@ class _RebatePageState extends ConsumerState<RebatePage> {
     List<DataRow> rows = [];
     for (int i = 0; i < rebateList.length; i++) {
       Rebate rebate = rebateList[i];
-      ParticipantRecord record = participantRecords[i];
+      // ParticipantRecord record = participantRecords[i];
       rows.add(DataRow(cells: [
-        DataCell(Text(rebate.id)),
         DataCell(Text(rebate.user)),
         DataCell(Text(rebate.participantRecord)),
         DataCell(Text(rebate.campaign)),
         DataCell(Text(rebate.requestedDate.toString())),
         DataCell(Text(rebate.rebateType)),
-        DataCell(
-          rebate.rebateType == 'SAFE_DRIVER_REBATE'
-              ? Text(record.totalOverallScore.toString())
-              : Text(record.totalDistance.toString()),
-        ),
+        // DataCell(
+        //   rebate.rebateType == 'SAFE_DRIVER_REBATE'
+        //       ? Text(record.totalOverallScore.toString())
+        //       : Text(record.totalDistance.toString()),
+        // ),
         DataCell(
           rebate.status == 'SUBMITTED'
               ? Row(
@@ -140,14 +111,14 @@ class _RebatePageState extends ConsumerState<RebatePage> {
                         await _rebateService.handleApproval(rebate);
                         setState(() {});
                       },
-                      child: Text('Approve'),
+                      child: const Text('Approve'),
                     ),
                     ElevatedButton(
                       onPressed: () async {
                         await _rebateService.handleRejection(rebate);
                         setState(() {});
                       },
-                      child: Text('Reject'),
+                      child: const Text('Reject'),
                     ),
                   ],
                 )
@@ -155,17 +126,17 @@ class _RebatePageState extends ConsumerState<RebatePage> {
         ),
       ]));
     }
-
     return DataTable(
+      dataRowMaxHeight: 100,
+      columnSpacing: 20,
       columns: const [
         // DataColumn(label: Text('ID')),
-        // DataColumn(label: Text('User')),
+        DataColumn(label: Text('User')),
         DataColumn(label: Text('Participant Record')),
         DataColumn(label: Text('Campaign')),
         DataColumn(label: Text('Requested Date')),
         DataColumn(label: Text('Rebate Type')),
-        DataColumn(label: Text('Details')),
-        DataColumn(label: Text('Status')),
+        DataColumn(label: Text('Status Operation')),
       ],
       rows: rows,
     );
