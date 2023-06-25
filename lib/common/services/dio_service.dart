@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:dlsm_web/app/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,13 +6,9 @@ import '../interceptors/access_token_interceptor.dart';
 import '../interceptors/refresh_token_interceptor.dart';
 import './env_service.dart';
 
-
 final dioServiceProvider = Provider<DioService>((ref) => DioService(ref));
 
-
-
 class DioService extends RiverpodService {
-
   Dio? _backendDio;
   Dio? _dio;
 
@@ -30,7 +25,7 @@ class DioService extends RiverpodService {
     return _dio!;
   }
 
-  Dio get  backendDio {
+  Dio get backendDio {
     if (_backendDio != null) return _backendDio!;
 
     BaseOptions options = BaseOptions(
@@ -50,6 +45,24 @@ class DioService extends RiverpodService {
     return _backendDio!;
   }
 
+  Dio get reportGenerationDio {
+    if (_backendDio != null) return _backendDio!;
+
+    BaseOptions options = BaseOptions(
+      baseUrl: _envService.getEnv('BACKEND_URL'),
+      connectTimeout: const Duration(seconds: 20),
+      headers: {
+        'Accept': 'text/csv',
+      },
+    );
+    _backendDio = Dio(options);
+
+    // Register interceptors
+    _backendDio!.interceptors.add(AccessTokenInterceptor());
+    _backendDio!.interceptors.add(RefreshTokenInterceptor());
+
+    return _backendDio!;
+  }
 
   DioService(ProviderRef ref) : super(ref);
 }

@@ -1,11 +1,11 @@
-import 'package:dlsm_web/admin/viewRebate.dart';
-import 'package:dlsm_web/admin/viewReport.dart';
-import 'package:dlsm_web/admin/viewUserProfile.dart';
-import 'package:dlsm_web/globalVar.dart' as globalVar;
+import 'package:dlsm_web/admin/view/tabView/viewRebate.dart';
+import 'package:dlsm_web/admin/view/tabView/viewReport.dart';
+import 'package:dlsm_web/admin/view/tabView/viewUserProfile.dart';
+
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 
-import 'menuItems.dart';
+import '../widgets/menuItems.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key, required this.title}) : super(key: key);
@@ -44,7 +44,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               children: const [
                 RebatePage(),
                 ProfilePage(),
-                //ReportPage(),
+                ReportPage(),
               ],
             ),
           ),
@@ -52,6 +52,4 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ),
     );
   }
-
-  
 }

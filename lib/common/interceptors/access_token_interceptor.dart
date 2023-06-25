@@ -2,7 +2,7 @@
 
 
 
-import '../../admin/auth/index.dart';
+import '../../auth/index.dart';
 import '../../app/index.dart';
 import '../index.dart';
 

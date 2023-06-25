@@ -1,7 +1,7 @@
+import 'package:dlsm_web/admin/model/rebate.dart';
 import 'package:dlsm_web/admin/services/rebate_service.dart';
 import 'package:flutter/material.dart';
 
-import 'model/rebate.dart';
 
 class RebatePage extends StatefulWidget {
   const RebatePage({super.key});

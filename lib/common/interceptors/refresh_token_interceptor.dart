@@ -4,7 +4,7 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
 
-import '../../admin/auth/index.dart';
+import '../../auth/index.dart';
 import '../../app/index.dart';
 import '../services/logger_service.dart';
 import '../services/dio_service.dart';

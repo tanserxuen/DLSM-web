@@ -3,8 +3,8 @@
 
 // ignore_for_file: deprecated_member_use
 
-import 'package:dlsm_web/admin/auth/index.dart';
-import 'package:dlsm_web/admin/auth/widgets/email_verification_field.dart';
+import 'package:dlsm_web/auth/index.dart';
+import 'package:dlsm_web/auth/widgets/email_verification_field.dart';
 import 'package:dlsm_web/app/index.dart';
 import 'package:dlsm_web/common/index.dart';
 

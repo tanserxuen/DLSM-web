@@ -1,4 +1,4 @@
-import 'package:dlsm_web/admin/user/index.dart';
+import 'package:dlsm_web/user/index.dart';
 import 'package:dlsm_web/common/index.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';

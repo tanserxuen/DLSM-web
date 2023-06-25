@@ -1,7 +1,7 @@
-import 'package:dlsm_web/admin/auth/views/reset_password_page.dart';
-import 'package:dlsm_web/admin/auth/views/sign_in.dart';
-import 'package:dlsm_web/admin/auth/views/verification_code_password.dart';
-import 'package:dlsm_web/admin/dashboard.dart';
+import 'package:dlsm_web/auth/views/reset_password_page.dart';
+import 'package:dlsm_web/auth/views/sign_in.dart';
+import 'package:dlsm_web/auth/views/verification_code_password.dart';
+import 'package:dlsm_web/admin/view/dashboard.dart';
 import 'package:dlsm_web/common/index.dart';
 
 import '../init_page.dart';
