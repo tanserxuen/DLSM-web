@@ -39,7 +39,7 @@ class _ReportPageState extends State<ReportPage> {
             subtitle: Text(
                 "${userList[index]['email']} ${userList[index]['phoneNumber']}"),
             trailing: TextButton(
-              child: const Text("View Report"),
+              child: const Text("Download Report"),
               onPressed: () {
                 generateReport(userList[index]['_id']);
               },
@@ -72,6 +72,30 @@ class _ReportPageState extends State<ReportPage> {
     await fetchRebate(uId);
     final font = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
     final ttf = pw.Font.ttf(font);
+    var tableContent;
+    if (rebateRecords.length == 0) {
+      tableContent = [
+        pw.TableRow(children: [pw.Text("No rebate records")])
+      ];
+    } else {
+      tableContent = rebateRecords
+          .map(
+            (e) => pw.TableRow(
+              children: <pw.Widget>[
+                pw.Container(
+                    height: 32, child: pw.Text(e['campaign'].toString())),
+                pw.Container(
+                    height: 32,
+                    child: pw.Text(DateFormat("yyyy-MM-dd h:mm:ss a")
+                        .format(DateTime.parse(e['requestedDate'])))),
+                pw.Container(
+                    height: 32, child: pw.Text(e['rebateType'].toString())),
+                pw.Container(height: 32, child: pw.Text(e['status'])),
+              ],
+            ),
+          )
+          .toList();
+    }
     pdf.addPage(pw.Page(
       build: (pw.Context context) =>
           pw.Table(border: pw.TableBorder.all(), children: [
@@ -87,23 +111,7 @@ class _ReportPageState extends State<ReportPage> {
             pw.Container(height: 32, child: pw.Text("Status")),
           ],
         ),
-        ...rebateRecords
-            .map(
-              (e) => pw.TableRow(
-                children: <pw.Widget>[
-                  pw.Container(
-                      height: 32, child: pw.Text(e['campaign'].toString())),
-                  pw.Container(
-                      height: 32,
-                      child: pw.Text(DateFormat("yyyy-MM-dd h:mm:ss a")
-                          .format(DateTime.parse(e['requestedDate'])))),
-                  pw.Container(
-                      height: 32, child: pw.Text(e['rebateType'].toString())),
-                  pw.Container(height: 32, child: pw.Text(e['status'])),
-                ],
-              ),
-            )
-            .toList()
+        ...tableContent
       ]),
     ));
 
