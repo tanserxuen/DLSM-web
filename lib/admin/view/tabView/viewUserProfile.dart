@@ -19,7 +19,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Logger get _logger => ref.read(loggerServiceProvider);
   UserProfileService get _userProfileService =>
       ref.read(userProfileServiceProvider);
-
+  UserListStateNotifier get _userStateNotifier =>
+      ref.read(userListStateProvider.notifier);
   @override
   void initState() {
     super.initState();
@@ -34,12 +35,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final userListState = ref.watch(userListStateProvider);
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
+      scrollDirection: Axis.vertical,
       child: userListState.isLoading == true
           ? const Center(child: CircularProgressIndicator())
           : Column(
-            children: [
-              Container(
+              children: [
+                Container(
                   child: <Widget>[
                     const Text('Admin Details')
                         .fontSize(25)
@@ -47,7 +48,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         .padding(top: 10),
                     const SizedBox(height: 10),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width*0.85,
+                      width: MediaQuery.of(context).size.width * 0.85,
                       child: DataTable(
                         dataRowMaxHeight: 80,
                         columnSpacing: 5,
@@ -58,10 +59,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           _dataColumn('Email'),
                           _dataColumn('Phone No'),
                           _dataColumn('ID No'),
-                         // _dataColumn('Action'),
+                          // _dataColumn('Action'),
                         ],
                         rows: [
-                          for (int i = 0; i < userListState.userList!.length; i++)
+                          for (int i = 0;
+                              i < userListState.userList!.length;
+                              i++)
                             if (userListState.userList?[i].roles[0] == 'admin')
                               _dataRow(
                                 userListState.userList![i].id,
@@ -83,7 +86,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         .padding(top: 10),
                     const SizedBox(height: 10),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width*0.85,
+                      width: MediaQuery.of(context).size.width * 0.85,
                       child: DataTable(
                         dataRowMaxHeight: 80,
                         columnSpacing: 5,
@@ -96,7 +99,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           _dataColumn('ID No'),
                         ],
                         rows: [
-                          for (int i = 0; i < userListState.userList!.length; i++)
+                          for (int i = 0;
+                              i < userListState.userList!.length;
+                              i++)
                             if (userListState.userList?[i].roles[0] == 'user')
                               _dataRow(
                                 userListState.userList![i].id,
@@ -112,8 +117,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     ),
                   ].toColumn(),
                 ),
-            ],
-          ),
+              ],
+            ),
     );
   }
 
@@ -140,7 +145,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         DataCell(Text(email)),
         DataCell(Text('+60 $phone')),
         DataCell(Text(idNo)),
-
       ],
       color: MaterialStateProperty.resolveWith<Color?>(
         (Set<MaterialState> states) {
