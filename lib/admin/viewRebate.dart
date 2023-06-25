@@ -50,7 +50,7 @@ class _RebatePageState extends ConsumerState<RebatePage> {
                 : rebateListState.rebateList!.isEmpty
                     ? const Center(
                         child:
-                            Text('There are cuurently no rebates to display'))
+                            Text('There are currently no rebates to display'))
                     : buildTable(rebateListState.rebateList!),
           )
         ],
@@ -109,15 +109,26 @@ class _RebatePageState extends ConsumerState<RebatePage> {
                     ElevatedButton(
                       onPressed: () async {
                         await _rebateService.handleApproval(rebate);
+                        await _rebateService.fetchData('SUBMITTED');
                         setState(() {});
                       },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
                       child: const Text('Approve'),
                     ),
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () async {
                         await _rebateService.handleRejection(rebate);
+                        await _rebateService.fetchData('SUBMITTED');
                         setState(() {});
                       },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
                       child: const Text('Reject'),
                     ),
                   ],
