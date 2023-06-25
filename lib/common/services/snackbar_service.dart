@@ -1,18 +1,11 @@
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dlsm_web/app/index.dart';
 import 'package:dlsm_web/common/index.dart';
 
-
-
-
-
-final snackBarServiceProvider = Provider<SnackBarService>((ref) => SnackBarService(ref));
-
-
+final snackBarServiceProvider =
+    Provider<SnackBarService>((ref) => SnackBarService(ref));
 
 class SnackBarService extends RiverpodService {
-
   SnackBarService(ProviderRef ref) : super(ref);
 
   void showSuccess(String title, [String message = ""]) {
@@ -34,8 +27,6 @@ class SnackBarService extends RiverpodService {
     SnackBar snackBar = _getSnackbar(ContentType.help, title, message);
     _showSnackbar(snackBar);
   }
-  
-
 
   SnackBar _getSnackbar(ContentType contentType, String title, String message) {
     final content = AwesomeSnackbarContent(
@@ -54,10 +45,11 @@ class SnackBarService extends RiverpodService {
     );
   }
 
-
   void _showSnackbar(SnackBar snackBar) {
     scaffoldMessenger
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
   }
+
+  // void _show
 }
