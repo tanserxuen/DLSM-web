@@ -18,7 +18,6 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   List userList = [];
   List rebateRecords = [];
-  final pdf = pw.Document();
   var anchor;
 
   @override
@@ -58,7 +57,6 @@ class _ReportPageState extends State<ReportPage> {
                 "Authorization": "Bearer ${globalVar.token}",
               }));
       if (response.statusCode == 200) {
-        // print(response.data);
         setState(() {
           userList = response.data as List;
         });
@@ -96,6 +94,8 @@ class _ReportPageState extends State<ReportPage> {
           )
           .toList();
     }
+
+    final pdf = pw.Document();
     pdf.addPage(pw.Page(
       build: (pw.Context context) =>
           pw.Table(border: pw.TableBorder.all(), children: [
@@ -115,10 +115,10 @@ class _ReportPageState extends State<ReportPage> {
       ]),
     ));
 
-    await savePDF(uId);
+    await savePDF(uId, pdf);
   }
 
-  savePDF(uId) async {
+  savePDF(uId, pdf) async {
     Uint8List pdfInBytes = await pdf.save();
     final blob = html.Blob([pdfInBytes], 'application/pdf');
     final url = html.Url.createObjectUrlFromBlob(blob);
