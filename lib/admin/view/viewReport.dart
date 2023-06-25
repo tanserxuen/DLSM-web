@@ -62,7 +62,7 @@ class _ReportPageState extends State<ReportPage> {
         });
       }
     } catch (e) {
-      print(e);
+      print('fetch users $e');
     }
   }
 
@@ -135,13 +135,13 @@ class _ReportPageState extends State<ReportPage> {
 
   fetchRebate(uId) async {
     try {
-      var response = await Dio()
-          .get('https://drive-less-save-more-1.herokuapp.com/view/records/$uId',
-              options: Options(headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                "Authorization": "Bearer ${globalVar.token}",
-              }));
+      var response = await Dio().get(
+          'https://drive-less-save-more-1.herokuapp.com/admin/records/$uId',
+          options: Options(headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${globalVar.token}",
+          }));
       if (response.statusCode == 200) {
         setState(() {
           var data = response.data
@@ -153,7 +153,7 @@ class _ReportPageState extends State<ReportPage> {
         });
       }
     } catch (e) {
-      print(e);
+      print('fetch rebate $e');
     }
   }
 }

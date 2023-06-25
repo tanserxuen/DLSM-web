@@ -1,12 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:dlsm_web/admin/viewRebate.dart';
-import 'package:dlsm_web/admin/viewReport.dart';
-import 'package:dlsm_web/admin/viewUserProfile.dart';
+import 'package:dlsm_web/admin/view/viewRebate.dart';
+import 'package:dlsm_web/admin/view/viewReport.dart';
+import 'package:dlsm_web/admin/view/viewUserProfile.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 
-import 'menuItems.dart';
+import 'package:dlsm_web/admin/widgets/menuItems.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key, required this.title}) : super(key: key);
