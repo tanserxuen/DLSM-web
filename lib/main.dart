@@ -1,20 +1,50 @@
 import 'package:dlsm_web/admin/dashboard.dart';
-import 'package:flutter/material.dart';
+import 'package:dlsm_web/admin/menuItems.dart';
+import 'package:dlsm_web/admin/viewUserProfile.dart';
+import 'package:dlsm_web/app/index.dart';
+import 'package:dlsm_web/common/index.dart';
 
-void main() {
-  runApp(MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize Hive
+  await Hive.initFlutter();
+  // Initialize Env
+  await riverpodContainer.read(envServiceProvider).initializeEnv();
+
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return UncontrolledProviderScope(
+        container: riverpodContainer, child: const MyApp());
+  }
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Store Dashboard',
+      title: 'Drive Less Save More (Admin)',
       theme: ThemeData(
         fontFamily: 'Nunito',
       ),
-      home: const AdminDashboard(title: 'Admin Dashboard'),
+      navigatorObservers: [routeObserver],
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: scaffoldMessengerKey,
+      routes: Routes.pages,
+      initialRoute: Routes.initPage,
+      // home: const AdminDashboard(title: "Dashboard"),
     );
   }
 }
