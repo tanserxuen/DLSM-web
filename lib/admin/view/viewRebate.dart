@@ -1,10 +1,11 @@
+import 'package:dlsm_web/admin/model/rebate.dart';
 import 'package:dlsm_web/admin/services/rebate_service.dart';
 import 'package:dlsm_web/admin/states/rebate_list_state.dart';
 import 'package:dlsm_web/common/index.dart';
 import 'package:flutter/material.dart';
 
-import 'model/participantRecord.dart';
-import 'model/rebate.dart';
+import 'package:dlsm_web/admin/model/participantRecord.dart';
+import 'package:dlsm_web/admin/model/rebate.dart';
 
 class RebatePage extends ConsumerStatefulWidget {
   const RebatePage({super.key});

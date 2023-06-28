@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:dlsm_web/admin/user/index.dart';
+import 'package:dlsm_web/user/index.dart';
 import 'package:dlsm_web/app/index.dart';
 import 'package:dlsm_web/common/index.dart';
 
