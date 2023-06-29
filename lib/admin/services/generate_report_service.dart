@@ -18,22 +18,20 @@ class GenerateReportService extends RiverpodService {
   ReportListStateNotifier get _reportStateNotifier =>
       ref.read(reportListStateProvider.notifier);
 
-  Future<List> fetchRebate(uId) async {
+  Future<void> fetchRebate(uId) async {
     try {
       Response response = await _dio.get(
         'admin/records/$uId',
       );
-      _logger.i(response.data);
-
-      List<Report> rebates = [];
+      List<Report> reports = [];
       for (var i = 0; i < response.data.length; i++) {
-        rebates.add(Report.fromJson(response.data[i]));
+        reports.add(Report.fromJson(response.data[i]));
       }
-      _reportStateNotifier.setReportList(rebates);
+      _reportStateNotifier.setReportList(reports);
       _logger.i("doneeeeeeeeeeeeeeeeeeeeeeeeee");
     } catch (e) {
       _logger.e('fetch rebate $e');
     }
-    throw Exception('Failed to load data');
+    
   }
 }
