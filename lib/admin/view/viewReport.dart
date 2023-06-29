@@ -1,24 +1,35 @@
 import 'dart:html' as html;
 import 'dart:typed_data';
+import 'package:dlsm_web/admin/services/generate_report_service.dart';
+import 'package:dlsm_web/admin/services/view_user_profile_service.dart';
+import 'package:dlsm_web/admin/states/report_list_state.dart';
+import 'package:dlsm_web/admin/states/user_list_state.dart';
+import 'package:dlsm_web/common/index.dart';
 import 'package:intl/intl.dart';
 
 import 'package:dio/dio.dart';
-import 'package:dlsm_web/globalVar.dart' as globalVar;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-class ReportPage extends StatefulWidget {
+class ReportPage extends ConsumerStatefulWidget {
   const ReportPage({super.key});
 
   @override
-  State<ReportPage> createState() => _ReportPageState();
+  ConsumerState<ReportPage> createState() => _ReportPageState();
 }
 
-class _ReportPageState extends State<ReportPage> {
-  List userList = [];
-  List rebateList = [];
+class _ReportPageState extends ConsumerState<ReportPage> {
+  Logger get _logger => ref.read(loggerServiceProvider);
+  UserProfileService get _userProfileService =>
+      ref.read(userProfileServiceProvider);
+  UserListStateNotifier get _userStateNotifier =>
+      ref.read(userListStateProvider.notifier);
+  GenerateReportService get _generateReportService =>
+      ref.read(generateReportServiceProvider);
+  ReportListStateNotifier get _reportStateNotifier =>
+      ref.read(reportListStateProvider.notifier);
   var anchor;
   final padding = pw.EdgeInsets.all(5);
   final headerColor = PdfColors.blue300;
@@ -27,46 +38,33 @@ class _ReportPageState extends State<ReportPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _userProfileService.getData();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userListState = ref.watch(userListStateProvider);
+    final userList = userListState.userList!;
+    final rebateListState = ref.watch(generateReportServiceProvider);
+
     return ListView.builder(
         itemCount: userList == [] ? 0 : userList.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
               child: ListTile(
-            title: Text("${userList[index]['fullname']}"),
-            subtitle: Text(
-                "${userList[index]['email']} ${userList[index]['phoneNumber']}"),
+            title: Text(userList[index].fullName),
+            subtitle:
+                Text("${userList[index].email} ${userList[index].phoneNumber}"),
             trailing: TextButton(
               child: const Text("Download Report"),
-              onPressed: () {
-                generateReport(userList[index]['_id']);
+              onPressed: () async {
+                generateReport(userList[index].id, rebateListState);
               },
             ),
           ));
         });
-  }
-
-  void getData() async {
-    try {
-      var response = await Dio()
-          .get('https://drive-less-save-more-1.herokuapp.com/admin/dashboard',
-              options: Options(headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json",
-                "Authorization": "Bearer ${globalVar.token}",
-              }));
-      if (response.statusCode == 200) {
-        setState(() {
-          userList = response.data as List;
-        });
-      }
-    } catch (e) {
-      print('fetch users $e');
-    }
   }
 
   generateTableRow(el) {
@@ -183,11 +181,19 @@ class _ReportPageState extends State<ReportPage> {
     return pw.Table(border: pw.TableBorder.all(), children: [...rebateRows]);
   }
 
-  generateReport(uId) async {
-    await fetchRebate(uId);
+  generateReport(uId, rebateListState) async {
+    List rebateList = [];
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _generateReportService.fetchRebate(uId);
+
+      rebateList = rebateListState.rebateList!;
+      print("sejhdkcxjkaudjnxiaksux");
+    });
     final font = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
     final ttf = pw.Font.ttf(font);
     var tableContent = [];
+    print("wdnjcssssssssssssssssssssssssssssssssssssssssssssssssssssk");
+    print(rebateList);
     if (rebateList.isEmpty) {
       tableContent.add(pw.Text("No Rebate Records"));
     } else {
@@ -234,28 +240,5 @@ class _ReportPageState extends State<ReportPage> {
 
     //to open the pdf
     anchor!.click();
-  }
-
-  fetchRebate(uId) async {
-    try {
-      var response = await Dio().get(
-          'https://drive-less-save-more-1.herokuapp.com/admin/records/$uId',
-          options: Options(headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-            "Authorization": "Bearer ${globalVar.token}",
-          }));
-      if (response.statusCode == 200) {
-        setState(() {
-          rebateList = response.data as List;
-          // .map((e) => e["rebateRecords"]);
-          // data.forEach(
-          //     (nums) => nums.forEach((number) => rebateRecords.add(number)));
-          // print(rebateRecords);
-        });
-      }
-    } catch (e) {
-      print('fetch rebate $e');
-    }
   }
 }
