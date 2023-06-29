@@ -29,7 +29,6 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
         selectedColor: Colors.lightBlue,
         selectedTitleTextStyle: const TextStyle(color: Colors.white),
         selectedIconColor: Colors.white,
-       
       ),
       title: Column(
         children: [
@@ -38,7 +37,6 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
               maxHeight: 150,
               maxWidth: 150,
             ),
-           
             child: const Text(
               'Easy SideMenu',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -61,15 +59,22 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
       items: [
         SideMenuItem(
           priority: 0,
+          title: 'Statistics',
+          onTap: (page, _) {
+            widget.sideMenu.changePage(page);
+          },
+          icon: const Icon(Icons.bar_chart),
+        ),
+        SideMenuItem(
+          priority: 1,
           title: 'Rebate',
           onTap: (page, _) {
             widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.money),
-        
         ),
         SideMenuItem(
-          priority: 1,
+          priority: 2,
           title: 'User Profile',
           onTap: (page, _) {
             widget.sideMenu.changePage(page);
@@ -77,13 +82,12 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
           icon: const Icon(Icons.person),
         ),
         SideMenuItem(
-          priority: 2,
+          priority: 3,
           title: 'Report',
           onTap: (page, _) {
             widget.sideMenu.changePage(page);
           },
           icon: const Icon(Icons.file_open),
-         
         ),
       ],
     );

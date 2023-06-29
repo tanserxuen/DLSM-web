@@ -2,10 +2,6 @@ import 'package:dlsm_web/admin/model/rebate.dart';
 import 'package:dlsm_web/admin/services/rebate_service.dart';
 import 'package:dlsm_web/admin/states/rebate_list_state.dart';
 import 'package:dlsm_web/common/index.dart';
-import 'package:flutter/material.dart';
-
-import 'package:dlsm_web/admin/model/participantRecord.dart';
-import 'package:dlsm_web/admin/model/rebate.dart';
 
 class RebatePage extends ConsumerStatefulWidget {
   const RebatePage({super.key});
@@ -45,6 +41,11 @@ class _RebatePageState extends ConsumerState<RebatePage> {
         children: [
           const SizedBox(height: 20),
           _buildStatusButton(),
+          const SizedBox(height: 20),
+          Text(
+            rebateListState.rebateList!.length.toString() + " Rebates",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           Expanded(
             child: rebateListState.isLoading
                 ? const Center(child: CircularProgressIndicator())

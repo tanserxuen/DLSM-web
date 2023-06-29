@@ -2,6 +2,7 @@
 
 import 'package:dlsm_web/admin/view/viewRebate.dart';
 import 'package:dlsm_web/admin/view/viewReport.dart';
+import 'package:dlsm_web/admin/view/viewStatistics.dart';
 import 'package:dlsm_web/admin/view/viewUserProfile.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
@@ -43,9 +44,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
             child: PageView(
               controller: page,
               children: const [
+                StatisticsPage(),
                 RebatePage(),
                 ProfilePage(),
-                ReportPage(),
+                // ReportPage(),
               ],
             ),
           ),

@@ -1,17 +1,19 @@
 import 'package:dlsm_web/admin/model/rebate.dart';
 
 class ParticipantRecord {
+  final String id;
   final String user;
   final String campaign;
   final int tripCount;
-  final double totalDistance;
-  final double totalOverallScore;
-  final double totalSpeedingScore;
-  final double totalAccelerationScore;
-  final double totalBrakingScore;
-  // final List<Rebate> rebateRecord;
+  final int totalDistance;
+  final int totalOverallScore;
+  final int totalSpeedingScore;
+  final int totalAccelerationScore;
+  final int totalBrakingScore;
+  final int v;
 
   ParticipantRecord({
+    required this.id,
     required this.user,
     required this.campaign,
     required this.tripCount,
@@ -20,11 +22,12 @@ class ParticipantRecord {
     required this.totalSpeedingScore,
     required this.totalAccelerationScore,
     required this.totalBrakingScore,
-    // required this.rebateRecord,
+    required this.v,
   });
 
   factory ParticipantRecord.fromJson(Map<String, dynamic> json) {
     return ParticipantRecord(
+      id: json['_id'],
       user: json['user'],
       campaign: json['campaign'],
       tripCount: json['tripCount'],
@@ -33,7 +36,7 @@ class ParticipantRecord {
       totalSpeedingScore: json['totalSpeedingScore'],
       totalAccelerationScore: json['totalAccelerationScore'],
       totalBrakingScore: json['totalBrakingScore'],
-      // rebateRecord: json['rebateRecord'],
+      v: json['__v'],
     );
   }
 }

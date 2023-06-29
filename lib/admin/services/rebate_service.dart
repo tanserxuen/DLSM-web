@@ -23,7 +23,7 @@ class RebateService extends RiverpodService {
 
   Future<void> fetchData(status) async {
     _rebateListStateNotifier.setIsLoading(true);
-    final response = await _dio.get('/rebate/rebateList');
+    final response = await _dio.get('/rebate/rebate-list');
     // print(response.data);
     final data = response.data as List<dynamic>;
     final List<Rebate> dataList = data
@@ -34,29 +34,85 @@ class RebateService extends RiverpodService {
     _rebateListStateNotifier.setRebateList(dataList);
   }
 
-  Future<ParticipantRecord> fetchParticipantRecord(
-      String user, String campaign) async {
-    final response = await _dio.get('/admin/records/$user');
+  Future<List<Rebate>> fetchAllData() async {
+    _rebateListStateNotifier.setIsLoading(true);
+    final response = await _dio.get('/rebate/rebate-list');
     // print(response.data);
-    // filter by campaign
-    // print(response);
     final data = response.data as List<dynamic>;
-    // print(data);
-    final dataList = data
-        .map((e) => ParticipantRecord.fromJson(e))
-        .where((record) => record.campaign == campaign)
+    final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
+    _logger.i(dataList);
+    return dataList;
+  }
+
+  // fetch participant record
+  Future<List<ParticipantRecord>> fetchParticipantRecord() async {
+    final response = await _dio.get('/campaign/records/previous');
+    final data = response.data as List<dynamic>;
+    print(data);
+    final List<ParticipantRecord> dataList =
+        data.map((e) => ParticipantRecord.fromJson(e)).toList();
+    _logger.i(dataList);
+    return dataList;
+  }
+
+  // fetch all approved rebate records for mileage-reduction
+  Future<List<Rebate>> fetchApprovedMileageReduction() async {
+    final response = await _dio.get('/rebate/previous/mileage-reduction');
+    final data = response.data as List<dynamic>;
+    final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
+    _logger.i(dataList);
+    return dataList;
+  }
+
+  // fetch all approved rebate records for safe-driver
+  Future<List<Rebate>> fetchApprovedSafeDriver() async {
+    final response = await _dio.get('/rebate/previous/safe-driver');
+    final data = response.data as List<dynamic>;
+    final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
+    _logger.i(dataList);
+    return dataList;
+  }
+
+  // return the number of previous rebate records for approved
+  Future<int> numOfPreviousApprovedRebate() async {
+    _rebateListStateNotifier.setIsLoading(true);
+    final response = await _dio.get('/rebate/rebate-list');
+    // print(response.data);
+    final data = response.data as List<dynamic>;
+    final List<Rebate> dataList = data
+        .map((e) => Rebate.fromJson(e))
+        .where((rebate) => rebate.status == "APPROVED")
         .toList();
-    // print(dataList);
-    // print(dataList[0].totalOverallScore);
-    // print(dataList[0].totalSpeedingScore);
-    // print(dataList[0].totalDistanceScore);
-    return dataList[0];
+    _logger.i(dataList);
+    _rebateListStateNotifier.setRebateList(dataList);
+    print(dataList.length.toInt());
+    return dataList.length.toInt();
+  }
+
+  // return the number of previous rebate records for safe-driver (approved)
+  Future<int> numOfPreviousApprovedSafeDriver() async {
+    _rebateListStateNotifier.setIsLoading(true);
+    final response = await _dio.get('/rebate/previous/safe-driver');
+    final data = response.data as List<dynamic>;
+    final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
+    // print number
+    print(dataList.length.toInt());
+    return dataList.length.toInt();
+  }
+
+  // return the number of previous rebate records for mileage-reduction (approved)
+  Future<int> numOfPreviousApprovedMileageReduction() async {
+    _rebateListStateNotifier.setIsLoading(true);
+    final response = await _dio.get('/rebate/previous/mileage-reduction');
+    final data = response.data as List<dynamic>;
+    final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
+    return dataList.length.toInt();
   }
 
   // update status of rebate
   Future<void> updateRebateStatus(String id, String status) async {
     final response =
-        await _dio.post('/rebate/updateStatus/$id', data: {"status": status});
+        await _dio.post('/rebate/update-status/$id', data: {"status": status});
 
     if (response.statusCode == 200) {
       print('Rebate status updated successfully');
