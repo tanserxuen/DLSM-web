@@ -36,7 +36,6 @@ class _ReportPageState extends ConsumerState<ReportPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _userProfileService.getData();
@@ -103,23 +102,32 @@ class _ReportPageState extends ConsumerState<ReportPage> {
       pw.TableRow(children: [
         pw.Container(
             height: 32,
-            child: pw.Text(el['totalDistance'].toString()),
+            child: pw.Text(
+                el!['totalDistance'] ? el!['totalDistance'].toString() : ""),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el['totalOverallScore'].toString()),
+            child: pw.Text(el!['totalOverallScore']
+                ? el!['totalOverallScore'].toString()
+                : ""),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el['totalSpeedingScore'].toString()),
+            child: pw.Text(el!['totalSpeedingScore']
+                ? el!['totalSpeedingScore'].toString()
+                : ""),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el['totalAccelerationScore'].toString()),
+            child: pw.Text(el!['totalAccelerationScore']
+                ? el!['totalAccelerationScore'].toString()
+                : ""),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el['totalBrakingScore'].toString()),
+            child: pw.Text(el!['totalBrakingScore']
+                ? el!['totalBrakingScore'].toString()
+                : ""),
             padding: padding),
       ]),
     ]);
@@ -159,15 +167,17 @@ class _ReportPageState extends ConsumerState<ReportPage> {
         rebateRows.add(pw.TableRow(children: [
           pw.Container(
               height: 32,
-              child: pw.Text(e['requestedDate'].toString()),
+              child: pw.Text(
+                  e!['requestedDate'] ? e['requestedDate']!.toString() : ""),
               padding: padding),
           pw.Container(
               height: 32,
-              child: pw.Text(e['rebateType'].toString()),
+              child:
+                  pw.Text(e!['rebateType'] ? e['rebateType']!.toString() : ""),
               padding: padding),
           pw.Container(
               height: 32,
-              child: pw.Text(e['status'].toString()),
+              child: pw.Text(e!['status'] ? e['status']!.toString() : ""),
               padding: padding),
         ]));
       }
@@ -199,7 +209,7 @@ class _ReportPageState extends ConsumerState<ReportPage> {
     } else {
       rebateList.forEach((element) {
         tableContent.add(pw.Padding(
-          child: pw.Text("Campaign: ${element['campaign']}"),
+          child: pw.Text("Campaign: ${element!['campaign']}"),
           padding: const pw.EdgeInsets.all(5),
         ));
         tableContent.add(generateTableRow(element));
