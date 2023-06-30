@@ -68,8 +68,9 @@ class RebateService extends RiverpodService {
   Future<List<Rebate>> fetchApprovedSafeDriver() async {
     final response = await _dio.get('/rebate/previous/safe-driver');
     final data = response.data as List<dynamic>;
+    print({"safeDriver": response.data});
     final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
-    _logger.i(dataList);
+    _logger.i({"safeDriver": dataList});
     return dataList;
   }
 
@@ -77,7 +78,6 @@ class RebateService extends RiverpodService {
   Future<int> numOfPreviousApprovedRebate() async {
     _rebateListStateNotifier.setIsLoading(true);
     final response = await _dio.get('/rebate/rebate-list');
-    // print(response.data);
     final data = response.data as List<dynamic>;
     final List<Rebate> dataList = data
         .map((e) => Rebate.fromJson(e))
@@ -85,7 +85,6 @@ class RebateService extends RiverpodService {
         .toList();
     _logger.i(dataList);
     _rebateListStateNotifier.setRebateList(dataList);
-    print(dataList.length.toInt());
     return dataList.length.toInt();
   }
 
@@ -93,10 +92,12 @@ class RebateService extends RiverpodService {
   Future<int> numOfPreviousApprovedSafeDriver() async {
     _rebateListStateNotifier.setIsLoading(true);
     final response = await _dio.get('/rebate/previous/safe-driver');
+    print({"prevSafeDriver": response.data});
     final data = response.data as List<dynamic>;
     final List<Rebate> dataList = data.map((e) => Rebate.fromJson(e)).toList();
     // print number
     print(dataList.length.toInt());
+    _logger.i({"prevSafeDriver": dataList});
     return dataList.length.toInt();
   }
 

@@ -31,11 +31,22 @@ class ParticipantRecord {
       user: json['user'],
       campaign: json['campaign'],
       tripCount: json['tripCount'],
-      totalDistance: json['totalDistance'],
-      totalOverallScore: json['totalOverallScore'],
-      totalSpeedingScore: json['totalSpeedingScore'],
-      totalAccelerationScore: json['totalAccelerationScore'],
-      totalBrakingScore: json['totalBrakingScore'],
+      totalDistance: json['totalDistance'].runtimeType == double
+          ? json['totalDistance'].toInt()
+          : json['totalDistance'],
+      totalOverallScore: json['totalOverallScore'].runtimeType == double
+          ? json['totalOverallScore'].toInt()
+          : json['totalOverallScore'],
+      totalSpeedingScore: json['totalSpeedingScore'].runtimeType == double
+          ? json['totalSpeedingScore'].toInt()
+          : json['totalSpeedingScore'],
+      totalAccelerationScore:
+          json['totalAccelerationScore'].runtimeType == double
+              ? json['totalAccelerationScore'].toInt()
+              : json['totalAccelerationScore'],
+      totalBrakingScore: json['totalBrakingScore'].runtimeType == double
+          ? json['totalBrakingScore'].toInt()
+          : json['totalBrakingScore'],
       v: json['__v'],
     );
   }

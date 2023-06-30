@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:dlsm_web/common/index.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -58,13 +58,13 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: ListView(
         children: [
+          const SizedBox(height: 15),
           Expanded(
             child: cardList(),
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 15),
           const Text(
             "Rebate Statistics",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -72,7 +72,7 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
           Expanded(child: RebateChart()),
           const SizedBox(height: 5),
           const Text(
-            "Driving Behavior Statistcs",
+            "Driving Behavior Statistics",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 3),
@@ -111,8 +111,8 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
   }
 
   Widget cardList() {
-    return Container(
-      height: 100,
+    return SizedBox(
+      height: 120,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 4,
