@@ -23,7 +23,7 @@ class RebateService extends RiverpodService {
 
   Future<void> fetchData(status) async {
     _rebateListStateNotifier.setIsLoading(true);
-    final response = await _dio.get('/rebate/rebateList');
+    final response = await _dio.get('/rebate/rebate-list');
     // print(response.data);
     final data = response.data as List<dynamic>;
     final List<Rebate> dataList = data
@@ -56,7 +56,7 @@ class RebateService extends RiverpodService {
   // update status of rebate
   Future<void> updateRebateStatus(String id, String status) async {
     final response =
-        await _dio.post('/rebate/updateStatus/$id', data: {"status": status});
+        await _dio.post('/rebate/update/$id', data: {"status": status});
 
     if (response.statusCode == 200) {
       print('Rebate status updated successfully');
