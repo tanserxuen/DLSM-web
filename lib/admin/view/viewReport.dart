@@ -56,8 +56,8 @@ class _ReportPageState extends ConsumerState<ReportPage> {
           return Card(
               child: ListTile(
             title: Text(userList[index].fullName),
-            subtitle:
-                Text("${userList[index].email} ${userList[index].phoneNumber}"),
+            subtitle: Text(
+                "${userList[index].email} ${userList[index].phoneNumber} ${userList[index].roles[0]}"),
             trailing: TextButton(
               child: const Text("Download Report"),
               onPressed: () async {
@@ -230,18 +230,18 @@ class _ReportPageState extends ConsumerState<ReportPage> {
       ]),
     ));
 
-//     await savePDF(uId, pdf);
-//   }
+    await savePDF(uId, pdf);
+  }
 
-//   savePDF(uId, pdf) async {
-//     Uint8List pdfInBytes = await pdf.save();
-//     final blob = html.Blob([pdfInBytes], 'application/pdf');
-//     final url = html.Url.createObjectUrlFromBlob(blob);
-//     anchor = html.document.createElement('a') as html.AnchorElement
-//       ..href = url
-//       ..style.display = 'none'
-//       ..download = '$uId Rebate Report.pdf';
-//     html.document.body!.children.add(anchor);
+  savePDF(uId, pdf) async {
+    Uint8List pdfInBytes = await pdf.save();
+    final blob = html.Blob([pdfInBytes], 'application/pdf');
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    anchor = html.document.createElement('a') as html.AnchorElement
+      ..href = url
+      ..style.display = 'none'
+      ..download = '$uId Rebate Report.pdf';
+    html.document.body!.children.add(anchor);
 
     //to open the pdf
     anchor!.click();

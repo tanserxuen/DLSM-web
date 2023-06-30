@@ -211,7 +211,7 @@ SfCartesianChart TripCountLineChart() {
   return SfCartesianChart(
     title: ChartTitle(
         text: 'Distance vs Overall Score',
-        textStyle: const TextStyle(fontSize: 10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
     legend: Legend(isVisible: true),
     tooltipBehavior: TooltipBehavior(enable: true),
     series: <ChartSeries>[
@@ -235,7 +235,7 @@ SfCartesianChart ScoreLineChart() {
   return SfCartesianChart(
     title: ChartTitle(
         text: 'Distance vs Overall Score',
-        textStyle: const TextStyle(fontSize: 10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
     legend: Legend(isVisible: true),
     tooltipBehavior: TooltipBehavior(enable: true),
     series: <ChartSeries>[
@@ -260,7 +260,7 @@ SfCartesianChart SpeedingLineChart() {
   return SfCartesianChart(
     title: ChartTitle(
         text: 'Distance vs Speeding Score',
-        textStyle: const TextStyle(fontSize: 10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
     legend: Legend(isVisible: true),
     tooltipBehavior: TooltipBehavior(enable: true),
     series: <ChartSeries>[
@@ -285,7 +285,7 @@ SfCartesianChart AccelerationLineChart() {
   return SfCartesianChart(
     title: ChartTitle(
         text: 'Distance vs Acceleration Score',
-        textStyle: const TextStyle(fontSize: 10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
     legend: Legend(isVisible: true),
     tooltipBehavior: TooltipBehavior(enable: true),
     series: <ChartSeries>[
@@ -311,7 +311,7 @@ SfCartesianChart BrakingLineChart() {
   return SfCartesianChart(
     title: ChartTitle(
         text: 'Distance vs Braking Score',
-        textStyle: const TextStyle(fontSize: 10)),
+        textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
     legend: Legend(isVisible: true),
     tooltipBehavior: TooltipBehavior(enable: true),
     series: <ChartSeries>[

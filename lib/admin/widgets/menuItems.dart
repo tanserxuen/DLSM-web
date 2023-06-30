@@ -37,10 +37,10 @@ class _SideBarMenuState extends ConsumerState<SideBarMenu> {
               maxHeight: 150,
               maxWidth: 150,
             ),
-            child: const Text(
-              'Easy SideMenu',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            child: FittedBox(
+                    child: Image.asset('assets/imgs/logo_title.png',
+                        fit: BoxFit.fill))
+                .padding(left: 30, top: 10),
           ),
           const Divider(
             indent: 8.0,

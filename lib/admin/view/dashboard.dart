@@ -47,7 +47,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 StatisticsPage(),
                 RebatePage(),
                 ProfilePage(),
-                // ReportPage(),
+                ReportPage(),
               ],
             ),
           ),
