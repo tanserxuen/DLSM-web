@@ -5,7 +5,6 @@ import '../dtos/index.dart';
 import '../states/auth_tokens_state.dart';
 import '../states/reset_password_token_state.dart';
 import './refresh_token_hive_service.dart';
-import 'package:dlsm_web/globalVar.dart' as globalVar;
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService(ref));
 
@@ -34,8 +33,6 @@ class AuthService extends RiverpodService {
         AuthTokensResponseDTO.fromJson(response.data);
     await _refreshTokenHiveService.setRefreshToken(tokens.refreshToken);
     _authTokensStateNotifier.setTokens(tokens.accessToken, tokens.refreshToken);
-    globalVar.token = tokens.accessToken;
-    print(globalVar.token);
     print(tokens.accessToken);
   }
 

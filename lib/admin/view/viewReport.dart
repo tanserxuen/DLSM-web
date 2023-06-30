@@ -1,120 +1,234 @@
-// import 'dart:html' as html;
-// import 'dart:typed_data';
-// import 'package:intl/intl.dart';
+import 'dart:html' as html;
+import 'dart:typed_data';
+import 'package:dlsm_web/admin/model/report.dart';
+import 'package:dlsm_web/admin/services/generate_report_service.dart';
+import 'package:dlsm_web/admin/services/view_user_profile_service.dart';
+import 'package:dlsm_web/admin/states/report_list_state.dart';
+import 'package:dlsm_web/admin/states/user_list_state.dart';
+import 'package:dlsm_web/common/index.dart';
+import 'package:intl/intl.dart';
 
-// import 'package:dio/dio.dart';
-// import 'package:dlsm_web/globalVar.dart' as globalVar;
-// import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:pdf/widgets.dart' as pw;
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
-// class ReportPage extends StatefulWidget {
-//   const ReportPage({super.key});
+class ReportPage extends ConsumerStatefulWidget {
+  const ReportPage({super.key});
 
-//   @override
-//   State<ReportPage> createState() => _ReportPageState();
-// }
+  @override
+  ConsumerState<ReportPage> createState() => _ReportPageState();
+}
 
-// class _ReportPageState extends State<ReportPage> {
-//   List userList = [];
-//   List rebateRecords = [];
-//   var anchor;
+class _ReportPageState extends ConsumerState<ReportPage> {
+  Logger get _logger => ref.read(loggerServiceProvider);
+  UserProfileService get _userProfileService =>
+      ref.read(userProfileServiceProvider);
+  UserListStateNotifier get _userStateNotifier =>
+      ref.read(userListStateProvider.notifier);
+  GenerateReportService get _generateReportService =>
+      ref.read(generateReportServiceProvider);
+  ReportListStateNotifier get _reportStateNotifier =>
+      ref.read(reportListStateProvider.notifier);
 
-//   @override
-//   void initState() {
-//     // TODO: implement initState
-//     super.initState();
-//     getData();
-//   }
+  SnackBarService get _snackBarService => ref.read(snackBarServiceProvider);
+  var anchor;
+  final padding = const pw.EdgeInsets.all(5);
+  final headerColor = PdfColors.blue300;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//         itemCount: userList == [] ? 0 : userList.length,
-//         itemBuilder: (BuildContext context, int index) {
-//           return Card(
-//               child: ListTile(
-//             title: Text(userList[index]['_id']),
-//             subtitle: Text(
-//                 "${userList[index]['email']} ${userList[index]['phoneNumber']}"),
-//             trailing: TextButton(
-//               child: const Text("Download Report"),
-//               onPressed: () {
-//                 generateReport(userList[index]['_id']);
-//               },
-//             ),
-//           ));
-//         });
-//   }
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _userProfileService.getData();
+    });
+  }
 
-//   void getData() async {
-//     try {
-//       var response = await Dio()
-//           .get('https://drive-less-save-more-1.herokuapp.com/admin/dashboard',
-//               options: Options(headers: {
-//                 "Access-Control-Allow-Origin": "*",
-//                 "Content-Type": "application/json",
-//                 "Authorization": "Bearer ${globalVar.token}",
-//               }));
-//       if (response.statusCode == 200) {
-//         setState(() {
-//           userList = response.data as List;
-//         });
-//       }
-//     } catch (e) {
-//       print('fetch users $e');
-//     }
-//   }
+  @override
+  Widget build(BuildContext context) {
+    final userListState = ref.watch(userListStateProvider);
+    final userList = userListState.userList!;
 
-//   generateReport(uId) async {
-//     await fetchRebate(uId);
-//     final font = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
-//     final ttf = pw.Font.ttf(font);
-//     var tableContent;
-//     if (rebateRecords.length == 0) {
-//       tableContent = [
-//         pw.TableRow(children: [pw.Text("No rebate records")])
-//       ];
-//     } else {
-//       tableContent = rebateRecords
-//           .map(
-//             (e) => pw.TableRow(
-//               children: <pw.Widget>[
-//                 pw.Container(
-//                     height: 32, child: pw.Text(e['campaign'].toString())),
-//                 pw.Container(
-//                     height: 32,
-//                     // child: pw.Text(DateFormat("yyyy-MM-dd h:mm:ss a")
-//                     //     .format(DateTime.parse(e['requestedDate'])))),
-//                     child: pw.Text(e['requestedDate'])),
-//                 pw.Container(
-//                     height: 32, child: pw.Text(e['rebateType'].toString())),
-//                 pw.Container(height: 32, child: pw.Text(e['status'])),
-//               ],
-//             ),
-//           )
-//           .toList();
-//     }
+    return ListView.builder(
+        itemCount: userList == [] ? 0 : userList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Card(
+              child: ListTile(
+            title: Text(userList[index].fullName),
+            subtitle:
+                Text("${userList[index].email} ${userList[index].phoneNumber}"),
+            trailing: TextButton(
+              child: const Text("Download Report"),
+              onPressed: () async {
+                await _generateReportService.fetchRebate(userList[index].id);
 
-//     final pdf = pw.Document();
-//     pdf.addPage(pw.Page(
-//       build: (pw.Context context) =>
-//           pw.Table(border: pw.TableBorder.all(), children: [
-//         pw.TableRow(children: [
-//           pw.Container(height: 32, child: pw.Text('User ID')),
-//           pw.Container(height: 32, child: pw.Text(uId))
-//         ]),
-//         pw.TableRow(
-//           children: <pw.Widget>[
-//             pw.Container(height: 32, child: pw.Text('Campaign')),
-//             pw.Container(height: 32, child: pw.Text('Requested Date')),
-//             pw.Container(height: 32, child: pw.Text('Rebate Type')),
-//             pw.Container(height: 32, child: pw.Text("Status")),
-//           ],
-//         ),
-//         ...tableContent
-//       ]),
-//     ));
+                generateReport();
+              },
+            ),
+          ));
+        });
+  }
+
+  generateTableRow(Report el) {
+    return pw.Table(border: pw.TableBorder.all(), children: [
+      //campaign header
+      pw.TableRow(
+        children: <pw.Widget>[
+          pw.Container(
+              height: 32,
+              child: pw.Text('Total Distance'),
+              padding: padding,
+              color: headerColor),
+          pw.Container(
+              height: 32,
+              child: pw.Text('Total Overall Score'),
+              padding: padding,
+              color: headerColor),
+          pw.Container(
+              height: 32,
+              child: pw.Text("Total Speeding Score"),
+              padding: padding,
+              color: headerColor),
+          pw.Container(
+              height: 32,
+              child: pw.Text("Total Acceleration Score"),
+              padding: padding,
+              color: headerColor),
+          pw.Container(
+              height: 32,
+              child: pw.Text("Total Braking Score"),
+              padding: padding,
+              color: headerColor),
+        ],
+      ),
+      //campaign data
+      pw.TableRow(children: [
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalDistance.toString()),
+            padding: padding),
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalOverallScore.toString()),
+            padding: padding),
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalSpeedingScore.toString()),
+            padding: padding),
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalAccelerationScore.toString()),
+            padding: padding),
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalBrakingScore.toString()),
+            padding: padding),
+      ]),
+    ]);
+  }
+
+  generateRecordsTable(Report el) {
+    List rebateRows = [];
+    if (el.rebateRecord!.isNotEmpty == true && el.rebateRecord != []) {
+      rebateRows.add(
+        pw.TableRow(children: [
+          pw.Container(
+              height: 32,
+              child: pw.Text("Rebate Records List"),
+              padding: padding),
+        ]),
+      );
+      rebateRows.add(pw.TableRow(children: [
+        pw.Container(
+            height: 32,
+            child: pw.Text("Requested Date"),
+            padding: padding,
+            color: headerColor),
+        pw.Container(
+            height: 32,
+            child: pw.Text("Rebate Type"),
+            padding: padding,
+            color: headerColor),
+        pw.Container(
+            height: 32,
+            child: pw.Text("Status"),
+            padding: padding,
+            color: headerColor),
+      ]));
+
+      for (var i = 0; i < el.rebateRecord!.length; i++) {
+        var e = el.rebateRecord![i];
+
+        rebateRows.add(pw.TableRow(children: [
+          pw.Container(
+              height: 32,
+              child: pw.Text(e.requestedDate!.toString()),
+              padding: padding),
+          pw.Container(
+              height: 32,
+              child: pw.Text(e.rebateType!.toString()),
+              padding: padding),
+          pw.Container(
+              height: 32,
+              child: pw.Text(e.status!.toString()),
+              padding: padding),
+        ]));
+      }
+    } else {
+      rebateRows.add(pw.TableRow(children: [
+        pw.Container(
+            height: 32, child: pw.Text("No Rebate Records"), padding: padding),
+      ]));
+    }
+
+    return pw.Table(border: pw.TableBorder.all(), children: [...rebateRows]);
+  }
+
+  void generateReport() async {
+    final reportListState = ref.watch(reportListStateProvider);
+    final font = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
+    final ttf = pw.Font.ttf(font);
+    var tableContent = [];
+
+    //check if user have any rebate records for any campaign
+    if (reportListState.reportList.isEmpty) {
+      _snackBarService.showInfo(
+          "No Rebate Records Found", "Please join a campaign to rebate.");
+      return;
+    }
+
+    String uId = reportListState.reportList[0].user;
+
+    _logger.i("Generating Report for $uId");
+
+    for (var element in reportListState.reportList) {
+      _logger.i({element});
+      tableContent.add(pw.Padding(
+        child: pw.Text("Campaign: ${element.campaign}"),
+        padding: const pw.EdgeInsets.all(5),
+      ));
+      tableContent.add(generateTableRow(element));
+      tableContent.add(generateRecordsTable(element));
+      tableContent.add(pw.SizedBox(height: 32));
+    }
+
+    final pdf = pw.Document();
+    // Uint8List imageData = Uint8List(0);
+
+    // await rootBundle
+    //     .load('assets/logo/dlsm.png.jpg')
+    //     .then((data) => setState(() => imageData = data.buffer.asUint8List()));
+    // final image = imageData.buffer.asUint8List();
+    pdf.addPage(pw.Page(
+      pageTheme: pw.PageTheme(pageFormat: PdfPageFormat.a4.landscape),
+      build: (pw.Context context) => pw.Column(children: [
+        pw.Text("User ID: $uId"),
+        // pw.Image(pw.MemoryImage(image)),
+        pw.SizedBox(height: 32),
+        ...tableContent
+      ]),
+    ));
 
 //     await savePDF(uId, pdf);
 //   }
@@ -129,31 +243,7 @@
 //       ..download = '$uId Rebate Report.pdf';
 //     html.document.body!.children.add(anchor);
 
-//     //to open the pdf
-//     anchor!.click();
-//   }
-
-//   fetchRebate(uId) async {
-//     try {
-//       var response = await Dio().get(
-//           'https://drive-less-save-more-1.herokuapp.com/admin/records/$uId',
-//           options: Options(headers: {
-//             "Access-Control-Allow-Origin": "*",
-//             "Content-Type": "application/json",
-//             "Authorization": "Bearer ${globalVar.token}",
-//           }));
-//       if (response.statusCode == 200) {
-//         setState(() {
-//           var data = response.data
-//               .where((i) => i["user"] == uId)
-//               .map((e) => e["rebateRecords"]);
-//           data.forEach(
-//               (nums) => nums.forEach((number) => rebateRecords.add(number)));
-//           print(rebateRecords);
-//         });
-//       }
-//     } catch (e) {
-//       print('fetch rebate $e');
-//     }
-//   }
-// }
+    //to open the pdf
+    anchor!.click();
+  }
+}

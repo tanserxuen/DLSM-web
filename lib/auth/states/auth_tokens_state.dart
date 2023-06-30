@@ -1,5 +1,3 @@
-import 'package:dlsm_web/globalVar.dart' as globalVar;
-
 import 'package:dlsm_web/app/index.dart';
 import 'package:dlsm_web/common/index.dart';
 
@@ -22,6 +20,5 @@ class AuthTokensStateNotifier extends RiverpodStateNotifier<AuthTokensState> {
   void setTokens(String? accessToken, String? refreshToken) {
     state =
         AuthTokensState(accessToken: accessToken, refreshToken: refreshToken);
-    globalVar.token = accessToken!;
   }
 }
