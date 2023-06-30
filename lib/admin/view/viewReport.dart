@@ -105,10 +105,12 @@ class _ReportPageState extends ConsumerState<ReportPage> {
       //campaign data
       pw.TableRow(children: [
         pw.Container(
-            height: 32, child: pw.Text(el.toString()), padding: padding),
-        pw.Container(
             height: 32,
             child: pw.Text(el.totalDistance.toString()),
+            padding: padding),
+        pw.Container(
+            height: 32,
+            child: pw.Text(el.totalOverallScore.toString()),
             padding: padding),
         pw.Container(
             height: 32,
