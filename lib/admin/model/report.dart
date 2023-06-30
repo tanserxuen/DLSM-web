@@ -9,7 +9,7 @@ class Report {
   final double totalSpeedingScore;
   final double totalAccelerationScore;
   final double totalBrakingScore;
-  final List<Rebate> rebateRecord;
+  final List<Rebate>? rebateRecord;
 
   Report({
     required this.user,
@@ -20,7 +20,7 @@ class Report {
     required this.totalSpeedingScore,
     required this.totalAccelerationScore,
     required this.totalBrakingScore,
-    required this.rebateRecord,
+    this.rebateRecord,
   });
 
   factory Report.fromJson(Map<String, dynamic> json) {
@@ -33,9 +33,11 @@ class Report {
       totalSpeedingScore: json['totalSpeedingScore'],
       totalAccelerationScore: json['totalAccelerationScore'],
       totalBrakingScore: json['totalBrakingScore'],
-      rebateRecord: json['rebateRecord'].map((e) {
-        Rebate.fromJson(e);
-      }).toList(),
+      rebateRecord: json['rebateRecord'] != null
+          ? (json['rebateRecord'] as List)
+              .map((i) => Rebate.fromJson(i))
+              .toList()
+          : null,
     );
   }
 }

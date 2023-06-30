@@ -1,5 +1,6 @@
 import 'dart:html' as html;
 import 'dart:typed_data';
+import 'package:dlsm_web/admin/model/report.dart';
 import 'package:dlsm_web/admin/services/generate_report_service.dart';
 import 'package:dlsm_web/admin/services/view_user_profile_service.dart';
 import 'package:dlsm_web/admin/states/report_list_state.dart';
@@ -31,7 +32,7 @@ class _ReportPageState extends ConsumerState<ReportPage> {
   ReportListStateNotifier get _reportStateNotifier =>
       ref.read(reportListStateProvider.notifier);
   var anchor;
-  final padding = pw.EdgeInsets.all(5);
+  final padding = const pw.EdgeInsets.all(5);
   final headerColor = PdfColors.blue300;
 
   @override
@@ -46,7 +47,6 @@ class _ReportPageState extends ConsumerState<ReportPage> {
   Widget build(BuildContext context) {
     final userListState = ref.watch(userListStateProvider);
     final userList = userListState.userList!;
-    final rebateListState = ref.watch(generateReportServiceProvider);
 
     return ListView.builder(
         itemCount: userList == [] ? 0 : userList.length,
@@ -59,14 +59,16 @@ class _ReportPageState extends ConsumerState<ReportPage> {
             trailing: TextButton(
               child: const Text("Download Report"),
               onPressed: () async {
-                generateReport(userList[index].id, rebateListState);
+                await _generateReportService.fetchRebate(userList[index].id);
+
+                generateReport();
               },
             ),
           ));
         });
   }
 
-  generateTableRow(el) {
+  generateTableRow(Report el) {
     return pw.Table(border: pw.TableBorder.all(), children: [
       //campaign header
       pw.TableRow(
@@ -101,41 +103,30 @@ class _ReportPageState extends ConsumerState<ReportPage> {
       //campaign data
       pw.TableRow(children: [
         pw.Container(
+            height: 32, child: pw.Text(el.toString()), padding: padding),
+        pw.Container(
             height: 32,
-            child: pw.Text(
-                el!['totalDistance'] ? el!['totalDistance'].toString() : ""),
+            child: pw.Text(el.totalDistance.toString()),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el!['totalOverallScore']
-                ? el!['totalOverallScore'].toString()
-                : ""),
+            child: pw.Text(el.totalSpeedingScore.toString()),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el!['totalSpeedingScore']
-                ? el!['totalSpeedingScore'].toString()
-                : ""),
+            child: pw.Text(el.totalAccelerationScore.toString()),
             padding: padding),
         pw.Container(
             height: 32,
-            child: pw.Text(el!['totalAccelerationScore']
-                ? el!['totalAccelerationScore'].toString()
-                : ""),
-            padding: padding),
-        pw.Container(
-            height: 32,
-            child: pw.Text(el!['totalBrakingScore']
-                ? el!['totalBrakingScore'].toString()
-                : ""),
+            child: pw.Text(el.totalBrakingScore.toString()),
             padding: padding),
       ]),
     ]);
   }
 
-  generateRecordsTable(el) {
+  generateRecordsTable(Report el) {
     List rebateRows = [];
-    if (el!['rebateRecords'].length > 0) {
+    if (el.rebateRecord!.isNotEmpty) {
       rebateRows.add(
         pw.TableRow(children: [
           pw.Container(
@@ -161,23 +152,22 @@ class _ReportPageState extends ConsumerState<ReportPage> {
             padding: padding,
             color: headerColor),
       ]));
-      for (var i = 0; i < el!['rebateRecords'].length; i++) {
-        var e = el!['rebateRecords'][i];
+
+      for (var i = 0; i < el.rebateRecord!.length; i++) {
+        var e = el.rebateRecord![i];
 
         rebateRows.add(pw.TableRow(children: [
           pw.Container(
               height: 32,
-              child: pw.Text(
-                  e!['requestedDate'] ? e['requestedDate']!.toString() : ""),
+              child: pw.Text(e.requestedDate.toString()),
               padding: padding),
           pw.Container(
               height: 32,
-              child:
-                  pw.Text(e!['rebateType'] ? e['rebateType']!.toString() : ""),
+              child: pw.Text(e.rebateType.toString()),
               padding: padding),
           pw.Container(
               height: 32,
-              child: pw.Text(e!['status'] ? e['status']!.toString() : ""),
+              child: pw.Text(e.status.toString()),
               padding: padding),
         ]));
       }
@@ -191,31 +181,24 @@ class _ReportPageState extends ConsumerState<ReportPage> {
     return pw.Table(border: pw.TableBorder.all(), children: [...rebateRows]);
   }
 
-  generateReport(uId, rebateListState) async {
-    List rebateList = [];
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _generateReportService.fetchRebate(uId);
-
-      rebateList = rebateListState.rebateList!;
-      print("sejhdkcxjkaudjnxiaksux");
-    });
+  void generateReport() async {
+    final reportListState = ref.watch(reportListStateProvider);
     final font = await rootBundle.load("assets/fonts/OpenSans-Regular.ttf");
     final ttf = pw.Font.ttf(font);
     var tableContent = [];
-    print("wdnjcssssssssssssssssssssssssssssssssssssssssssssssssssssk");
-    print(rebateList);
-    if (rebateList.isEmpty) {
-      tableContent.add(pw.Text("No Rebate Records"));
-    } else {
-      rebateList.forEach((element) {
-        tableContent.add(pw.Padding(
-          child: pw.Text("Campaign: ${element!['campaign']}"),
-          padding: const pw.EdgeInsets.all(5),
-        ));
-        tableContent.add(generateTableRow(element));
-        tableContent.add(generateRecordsTable(element));
-        tableContent.add(pw.SizedBox(height: 32));
-      });
+
+    String uId = reportListState.reportList[0].user;
+
+    _logger.i("Generating Report for $uId");
+
+    for (var element in reportListState.reportList) {
+      tableContent.add(pw.Padding(
+        child: pw.Text("Campaign: ${element.campaign}"),
+        padding: const pw.EdgeInsets.all(5),
+      ));
+      tableContent.add(generateTableRow(element));
+      tableContent.add(generateRecordsTable(element));
+      tableContent.add(pw.SizedBox(height: 32));
     }
 
     final pdf = pw.Document();

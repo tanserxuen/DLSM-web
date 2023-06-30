@@ -11,10 +11,10 @@ final reportListStateProvider =
         (ref) => ReportListStateNotifier(ref));
 
 class ReportListState {
-  final List<Report>? reportList;
+  final List<Report> reportList;
 
   bool isLoading;
-  ReportListState({this.reportList, this.isLoading = true});
+  ReportListState({required this.reportList, this.isLoading = true});
 }
 
 class ReportListStateNotifier extends RiverpodStateNotifier<ReportListState> {
