@@ -43,8 +43,8 @@ class _RebatePageState extends ConsumerState<RebatePage> {
           _buildStatusButton(),
           const SizedBox(height: 20),
           Text(
-            rebateListState.rebateList!.length.toString() + " Rebates",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            "${rebateListState.rebateList != null ? rebateListState.rebateList!.length : 0} Rebates",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           Expanded(
             child: rebateListState.isLoading
