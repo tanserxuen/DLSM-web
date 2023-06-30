@@ -33,11 +33,11 @@ class Report {
       totalSpeedingScore: json['totalSpeedingScore'],
       totalAccelerationScore: json['totalAccelerationScore'],
       totalBrakingScore: json['totalBrakingScore'],
-      rebateRecord: json['rebateRecord'] != null
-          ? (json['rebateRecord'] as List)
+      rebateRecord: json['rebateRecords'] != null
+          ? (json['rebateRecords'] as List)
               .map((i) => Rebate.fromJson(i))
               .toList()
-          : null,
+          : [],
     );
   }
 }

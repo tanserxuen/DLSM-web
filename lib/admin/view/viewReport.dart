@@ -31,6 +31,8 @@ class _ReportPageState extends ConsumerState<ReportPage> {
       ref.read(generateReportServiceProvider);
   ReportListStateNotifier get _reportStateNotifier =>
       ref.read(reportListStateProvider.notifier);
+
+  SnackBarService get _snackBarService => ref.read(snackBarServiceProvider);
   var anchor;
   final padding = const pw.EdgeInsets.all(5);
   final headerColor = PdfColors.blue300;
@@ -126,7 +128,7 @@ class _ReportPageState extends ConsumerState<ReportPage> {
 
   generateRecordsTable(Report el) {
     List rebateRows = [];
-    if (el.rebateRecord!.isNotEmpty) {
+    if (el.rebateRecord!.isNotEmpty == true && el.rebateRecord != []) {
       rebateRows.add(
         pw.TableRow(children: [
           pw.Container(
@@ -159,15 +161,15 @@ class _ReportPageState extends ConsumerState<ReportPage> {
         rebateRows.add(pw.TableRow(children: [
           pw.Container(
               height: 32,
-              child: pw.Text(e.requestedDate.toString()),
+              child: pw.Text(e.requestedDate!.toString()),
               padding: padding),
           pw.Container(
               height: 32,
-              child: pw.Text(e.rebateType.toString()),
+              child: pw.Text(e.rebateType!.toString()),
               padding: padding),
           pw.Container(
               height: 32,
-              child: pw.Text(e.status.toString()),
+              child: pw.Text(e.status!.toString()),
               padding: padding),
         ]));
       }
@@ -187,11 +189,19 @@ class _ReportPageState extends ConsumerState<ReportPage> {
     final ttf = pw.Font.ttf(font);
     var tableContent = [];
 
+    //check if user have any rebate records for any campaign
+    if (reportListState.reportList.isEmpty) {
+      _snackBarService.showInfo(
+          "No Rebate Records Found", "Please join a campaign to rebate.");
+      return;
+    }
+
     String uId = reportListState.reportList[0].user;
 
     _logger.i("Generating Report for $uId");
 
     for (var element in reportListState.reportList) {
+      _logger.i({element});
       tableContent.add(pw.Padding(
         child: pw.Text("Campaign: ${element.campaign}"),
         padding: const pw.EdgeInsets.all(5),

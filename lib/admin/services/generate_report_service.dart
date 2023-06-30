@@ -28,10 +28,11 @@ class GenerateReportService extends RiverpodService {
         reports.add(Report.fromJson(response.data[i]));
       }
       _reportStateNotifier.setReportList(reports);
+
       _logger.i("doneeeeeeeeeeeeeeeeeeeeeeeeee");
+      _logger.i({reports});
     } catch (e) {
       _logger.e('fetch rebate $e');
     }
-    
   }
 }
